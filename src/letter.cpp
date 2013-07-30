@@ -1,0 +1,105 @@
+#include "letter.h"
+
+#include <QHBoxLayout>
+#include <QTimer>
+#include <QPropertyAnimation>
+#include <QTextEdit>
+#include <QTextCodec>
+
+#include "welcomepage.h"
+
+static const char *content = "目击众神死亡的草原上野花一片\n"
+                             "远在远方的风比远方更远\n"
+                             "我的琴声呜咽 泪水全无\n"
+                             "我把这远方的远归还草原\n"
+                             "一个叫木头 一个叫马尾\n"
+                             "我的琴声呜咽 泪水全无\n"
+                             "\n"
+                             "\n"
+                             "远方只有在死亡中凝聚野花一片\n"
+                             "明月如镜 高悬草原 映照千年岁月\n"
+                             "我的琴声呜咽 泪水全无\n"
+                             "只身打马过草原\n"
+                             "From 海子 <九月>\n";
+
+Letter::Letter(QWidget *parent)
+         :QWidget(parent)
+{
+    setMinimumSize(800, 600);
+    setWindowTitle(tr("A letter from somewhere..."));
+
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    setLayout(layout);
+
+    welcome    = NULL;
+    letterEdit = NULL;
+    letterPos  = 0;
+
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    letterContent = codec->toUnicode(content);
+    letterLen     = letterContent.length();
+
+    welcomeTimer = new QTimer(this);
+    welcomeTimer->singleShot(INIT_MSEC, this, SLOT(showWelcomePage()));
+}
+
+void Letter::showWelcomePage()
+{
+    welcome = new WelcomePage(this);
+    connect(welcome, SIGNAL(welcomePageLoaded()), this, SLOT(removeWelcomePage()));
+
+    QPropertyAnimation *welAnimation = new QPropertyAnimation(welcome, "opacity");
+    welAnimation->setDuration(CHANGE_MSEC);
+    welAnimation->setStartValue(0.0);
+    welAnimation->setEndValue(0.0);
+    welAnimation->setKeyValueAt(0.8, 1);
+    connect(welAnimation, SIGNAL(finished()), welcome, SIGNAL(welcomePageLoaded()));
+    connect(welAnimation, SIGNAL(finished()), this, SLOT(showLetter()));
+
+    this->layout()->addWidget(welcome);
+
+    welAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void Letter::removeWelcomePage()
+{
+    this->layout()->removeWidget(welcome);
+    delete welcome;
+    delete welcomeTimer;
+}
+
+void Letter::showLetter()
+{
+    letterEdit = new QTextEdit(this);
+    letterEdit->setReadOnly(true);
+    letterEdit->setAlignment(Qt::AlignHCenter);
+    letterEdit->setFontPointSize(12);
+    QPalette bgPalette;
+    QPixmap  bgPixmap(":/data/letter.png");
+    bgPalette.setBrush(QPalette::Base, QBrush(bgPixmap));
+    letterEdit->setPalette(bgPalette);
+    letterTimer = new QTimer(this);
+    connect(letterTimer, SIGNAL(timeout()), this, SLOT(appendLetter()));
+    this->layout()->addWidget(letterEdit);
+    letterTimer->start(200);
+}
+
+void Letter::appendLetter()
+{
+    if (!letterEdit)
+        return;
+    letterEdit->textCursor().insertText(letterContent.at(letterPos));
+    letterPos++;
+    if (letterPos == letterLen) {
+        letterTimer->stop();
+        delete letterTimer;
+        emit letterDone();
+    }
+}
+
+void Letter::keyPressEvent(QKeyEvent *event)
+{
+    QWidget::keyPressEvent(event);
+}

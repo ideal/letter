@@ -1,0 +1,6 @@
+<RCC version="1.0">
+<qresource>
+  <file>data/front.png</file>
+  <file>data/letter.png</file>
+</qresource>
+</RCC>
