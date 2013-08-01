@@ -40,9 +40,11 @@ public slots:
     void removeWelcomePage();
     void showLetter();
     void appendLetter();
+    void fireworks();
 
 signals:
     void letterDone();
+    void keyMatched(QByteArray keySeq);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -55,6 +57,7 @@ private:
     QString      letterContent;
     int          letterLen;
     int          letterPos;
+    QByteArray   keySequence;
 };
 
 #endif

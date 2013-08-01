@@ -25,6 +25,7 @@
 #include <QPropertyAnimation>
 #include <QTextEdit>
 #include <QTextCodec>
+#include <QKeyEvent>
 
 #include "welcomepage.h"
 
@@ -41,6 +42,8 @@ static const char *content = "目击众神死亡的草原上野花一片\n"
                              "我的琴声呜咽 泪水全无\n"
                              "只身打马过草原\n"
                              "From 海子 <九月>\n";
+
+static const QByteArray name("\x68\x65\x68\x6f\x6e\x67\x6c\x69\x6e\x67");
 
 Letter::Letter(QWidget *parent)
          :QWidget(parent)
@@ -104,6 +107,9 @@ void Letter::showLetter()
     connect(letterTimer, SIGNAL(timeout()), this, SLOT(appendLetter()));
     this->layout()->addWidget(letterEdit);
     letterTimer->start(200);
+
+    keySequence.clear();
+    connect(this, SIGNAL(keyMatched(QByteArray)), this, SLOT(fireworks()));
 }
 
 void Letter::appendLetter()
@@ -119,7 +125,19 @@ void Letter::appendLetter()
     }
 }
 
+void Letter::fireworks()
+{
+    return;
+}
+
 void Letter::keyPressEvent(QKeyEvent *event)
 {
+    keySequence.append(event->text());
+    if (keySequence.size() == name.size()) {
+        if (keySequence == name) {
+            emit keyMatched(keySequence);
+        }
+        keySequence.clear();
+    }
     QWidget::keyPressEvent(event);
 }
