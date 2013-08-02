@@ -20,6 +20,8 @@
 
 #include "firework.h"
 
+#include <QPainter>
+
 Firework::Firework(QWidget *parent)
          :QWidget(parent)
 {
@@ -53,4 +55,9 @@ void Firework::addFrame()
 
 void Firework::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, this->antialiased);
+    painter.translate(width() / 2, height());
 }
