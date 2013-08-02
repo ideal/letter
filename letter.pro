@@ -4,11 +4,13 @@ TARGET   = letter
 SOURCES *= \
     src/letter.cpp \
     src/welcomepage.cpp \
+    src/firework.cpp \
     src/main.cpp
 
 HEADERS *= \
     src/letter.h \
-    src/welcomepage.h
+    src/welcomepage.h \
+    src/firework.h
 
 RESOURCES = letter.qrc
 
