@@ -28,6 +28,7 @@
 #include <QKeyEvent>
 
 #include "welcomepage.h"
+#include "firework.h"
 
 static const char *content = "目击众神死亡的草原上野花一片\n"
                              "远在远方的风比远方更远\n"
@@ -66,6 +67,8 @@ Letter::Letter(QWidget *parent)
 
     welcomeTimer = new QTimer(this);
     welcomeTimer->singleShot(INIT_MSEC, this, SLOT(showWelcomePage()));
+
+    fireworkTimer = NULL;
 }
 
 void Letter::showWelcomePage()
@@ -127,7 +130,13 @@ void Letter::appendLetter()
 
 void Letter::fireworks()
 {
-    return;
+    if (!fireworkTimer) {
+        fireworkTimer = new QTimer(this);
+        fireworkTimer->start(100);
+    }
+    Firework *firework = new Firework();
+    connect(fireworkTimer, SIGNAL(timeout()), firework, SLOT(addFrame()));
+    firework->show();
 }
 
 void Letter::keyPressEvent(QKeyEvent *event)

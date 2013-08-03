@@ -42,12 +42,12 @@ void Firework::setAntialiased(bool antialiased)
 
 QSize Firework::minimumSizeHint() const
 {
-    return QSize(100, 100);
+    return QSize(120, 100);
 }
 
 QSize Firework::sizeHint() const
 {
-    return QSize(200, 200);
+    return QSize(240, 200);
 }
 
 void Firework::addFrame()
@@ -66,7 +66,7 @@ void Firework::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, this->antialiased);
     painter.translate(width() / 2, height());
 
-    for (int d = 0; d < 256; d+= 8) {
+    for (int d = 0; d < 512; d+= 8) {
         uint delta = qAbs((this->frameNumber) % 128 - d / 2);
         int  alpha = 255 - (delta * delta) / 4 - d;
 

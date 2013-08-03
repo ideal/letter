@@ -58,6 +58,7 @@ private:
     int          letterLen;
     int          letterPos;
     QByteArray   keySequence;
+    QTimer      *fireworkTimer;
 };
 
 #endif
