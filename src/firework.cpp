@@ -60,4 +60,15 @@ void Firework::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, this->antialiased);
     painter.translate(width() / 2, height());
+
+    for (int d = 0; d < 256; d+= 8) {
+        uint delta = qAbs((this->frameNumber) % 128 - d / 2);
+        int  alpha = 255 - (delta * delta) / 4 - d;
+
+        if (alpha <= 0)
+            continue;
+
+        painter.setPen(QPen(QColor(), 4));
+        painter.drawEllipse(QRect(-d / 2, -d / 2, d, d));
+    }
 }
