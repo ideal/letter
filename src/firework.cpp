@@ -20,7 +20,10 @@
 
 #include "firework.h"
 
+#include <QColor>
 #include <QPainter>
+
+static const Qt::GlobalColor colors[] = { Qt::red, Qt::magenta, Qt::yellow, Qt::green, Qt::blue, Qt::darkBlue, Qt::cyan };
 
 Firework::Firework(QWidget *parent)
          :QWidget(parent)
@@ -57,6 +60,8 @@ void Firework::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
+    uint size = sizeof(colors) / sizeof(colors[0]);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, this->antialiased);
     painter.translate(width() / 2, height());
@@ -68,7 +73,9 @@ void Firework::paintEvent(QPaintEvent *event)
         if (alpha <= 0)
             continue;
 
-        painter.setPen(QPen(QColor(), 4));
+        QColor color(colors[d % size]);
+        color.setAlpha(alpha);
+        painter.setPen(QPen(color, 4));
         painter.drawEllipse(QRect(-d / 2, -d / 2, d, d));
     }
 }
