@@ -23,7 +23,9 @@
 #include <QColor>
 #include <QPainter>
 
-static const Qt::GlobalColor colors[] = { Qt::red, Qt::magenta, Qt::yellow, Qt::green, Qt::blue, Qt::darkBlue, Qt::cyan };
+static const Qt::GlobalColor colors[] = { Qt::red, Qt::magenta, Qt::yellow,
+                                          Qt::green, Qt::blue, Qt::darkBlue,
+                                          Qt::cyan };
 
 Firework::Firework(QWidget *parent)
          :QWidget(parent)
