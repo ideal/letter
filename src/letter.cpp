@@ -142,11 +142,11 @@ void Letter::fireworks()
 void Letter::keyPressEvent(QKeyEvent *event)
 {
     keySequence.append(event->text());
-    if (keySequence.size() == name.size()) {
-        if (keySequence == name) {
-            emit keyMatched(keySequence);
-        }
-        keySequence.clear();
+    if (keySequence.size() > 8) {
+        keySequence.remove(0, 1);
+    }
+    if (keySequence.size() == name.size() && keySequence == name) {
+        emit keyMatched(keySequence);
     }
     QWidget::keyPressEvent(event);
 }
