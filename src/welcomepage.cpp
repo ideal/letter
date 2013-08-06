@@ -40,5 +40,5 @@ void WelcomePage::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     painter.setOpacity(m_opacity);
-    painter.drawPixmap(front.rect(), front);
+    painter.drawPixmap(QRect(0, 0, 800, 600), front.scaled(800, 600));
 }
