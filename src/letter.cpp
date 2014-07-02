@@ -26,6 +26,7 @@
 #include <QTextEdit>
 #include <QTextCodec>
 #include <QKeyEvent>
+#include <QUrl>
 
 #include "welcomepage.h"
 #include "firework.h"
@@ -123,9 +124,18 @@ void Letter::appendLetter()
     letterPos++;
     if (letterPos == letterLen) {
         letterTimer->stop();
+        this->appendImage(":/data/qrcode.png");
         delete letterTimer;
         emit letterDone();
     }
+}
+
+void Letter::appendImage(const QString &imgpath)
+{
+    QImage image(imgpath);
+    letterEdit->document()->addResource(QTextDocument::ImageResource,
+                            QUrl("image"), image);
+    letterEdit->textCursor().insertImage("image");
 }
 
 void Letter::fireworks()

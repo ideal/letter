@@ -34,6 +34,7 @@ class Letter: public QWidget
 
 public:
     Letter(QWidget *parent = NULL);
+    void appendImage(const QString &imgpath);
 
 public slots:
     void showWelcomePage();
