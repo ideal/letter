@@ -124,7 +124,7 @@ void Letter::appendLetter()
     letterPos++;
     if (letterPos == letterLen) {
         letterTimer->stop();
-        this->appendImage(":/data/qrcode.png");
+        this->appendImage("data/qrcode.png");
         delete letterTimer;
         emit letterDone();
     }
